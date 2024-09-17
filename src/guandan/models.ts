@@ -16,15 +16,15 @@ export type Pair = {
  * @property {number} tableId 桌号
  * @property {number} pair1 对1
  * @property {number} pair2 对2
- * @property {number} level1 对1终局级数
- * @property {number} level2 对2终局级数
+ * @property {number} level1 对1终局级数（0为未录入）
+ * @property {number} level2 对2终局级数（0为未录入）
  */
 export type Game = {
   tableId: number
   pair1: number
   pair2: number
-  level1?: number
-  level2?: number
+  level1: number
+  level2: number
 }
 
 /**

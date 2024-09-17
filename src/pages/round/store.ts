@@ -16,3 +16,7 @@ export const RoundStore = {
   rounds: atom<Round[]>([]),
   curRound: atom(1),
 }
+
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
+window.__RoundStore = RoundStore

@@ -64,6 +64,10 @@ export const arrangeGames = (
     let opponentPair: number | undefined = undefined
     for (let j = i + 1; j < lastRoundPairsRank.length; j++) {
       const maybeOpponentPair = lastRoundPairsRank[j].pairId
+      // * 要跳过已经安排的对
+      if (arrangedIndexes.has(maybeOpponentPair)) {
+        continue
+      }
       if (!hasEncountered(curPair, maybeOpponentPair)) {
         opponentPair = maybeOpponentPair
         break
@@ -82,6 +86,8 @@ export const arrangeGames = (
       tableId: games.length + 1,
       pair1: curPair,
       pair2: opponentPair,
+      level1: 0,
+      level2: 0,
     })
     arrangedIndexes.add(curPair)
     arrangedIndexes.add(opponentPair)
@@ -106,6 +112,8 @@ const arrangeGamesFirstRound = (pairs: Pair[]): Game[] => {
       tableId: i / 2 + 1,
       pair1: pairIds[i],
       pair2: pairIds[i + 1],
+      level1: 0,
+      level2: 0,
     })
   }
   return games

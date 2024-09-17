@@ -1,5 +1,7 @@
 import { getDefaultStore } from 'jotai'
 
+import { Pair } from '@/guandan/models'
+
 import { PairStore } from './store'
 
 export const addNewPair = () => {
@@ -30,19 +32,16 @@ export const addManyNewPair = (size: number) => {
   })
 }
 
-export const updateUserName = (
-  pairId: number,
-  user1?: string,
-  user2?: string,
-) => {
+export const updatePair = (pair: Pair) => {
   const store = getDefaultStore()
   store.set(PairStore.pairs, (pairs) => {
     const pairsCopy = pairs.slice()
-    const targetPair = pairsCopy.find((p) => p.pairId === pairId)
-    if (targetPair) {
-      if (user1) targetPair.user1 = user1
-      if (user2) targetPair.user2 = user2
+    const index = pairsCopy.findIndex((p) => p.pairId === pair.pairId)
+    if (index !== -1) {
+      pairsCopy[index] = pair
+      return pairsCopy
+    } else {
+      return pairs
     }
-    return pairsCopy
   })
 }

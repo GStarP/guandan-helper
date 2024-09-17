@@ -1,7 +1,7 @@
 import { getDefaultStore } from 'jotai'
 
 import { arrangeGames, computeTotalScore } from '@/guandan'
-import { Round } from '@/guandan/models'
+import { Game, PairWithTotalScore, Round } from '@/guandan/models'
 
 import { PairStore } from '../pair/store'
 import { RoundPageRoute, RoundStore } from './store'
@@ -41,11 +41,71 @@ export const updateCurRound = (roundId: number) => {
   store.set(RoundStore.curRound, roundId)
 }
 
-export const updateGameLevel = (
+export const updateGame = (roundId: number, game: Game) => {
+  const store = getDefaultStore()
+  store.set(RoundStore.rounds, (rounds) => {
+    const roundsCopy = rounds.slice()
+    const round = roundsCopy.find((r) => r.roundId === roundId)
+    if (!round) {
+      alert(`轮次 ${roundId} 不存在！`)
+      return rounds
+    }
+    const index = round.games.findIndex((g) => g.tableId === game?.tableId)
+    if (index === -1) {
+      alert(`桌号 ${game} 不存在`)
+      return rounds
+    } else {
+      round.games[index] = game
+      return roundsCopy
+    }
+  })
+}
+
+export const parseLevel = (input: string): number => {
+  try {
+    return parseInt(input)
+  } catch (e) {
+    // do nothing
+  }
+
+  switch (input) {
+    case 'J':
+      return 11
+    case 'Q':
+      return 12
+    case 'K':
+      return 13
+    case 'A':
+      return 14
+    case 'A+':
+      return 15
+    default:
+      return 0
+  }
+}
+
+export const recomputeTotalScore = (roundId: number) => {
+  const store = getDefaultStore()
+  store.set(RoundStore.rounds, (rounds) => {
+    const roundsCopy = rounds.slice()
+    const round = roundsCopy.find((r) => r.roundId === roundId)
+    if (!round) {
+      alert(`轮次 ${roundId} 不存在！`)
+      return rounds
+    }
+    try {
+      round.totalScores = computeTotalScore(roundId, rounds)
+      return roundsCopy
+    } catch (e) {
+      alert(e)
+      return rounds
+    }
+  })
+}
+
+export const updateTotalScore = (
   roundId: number,
-  tableId: number,
-  level1?: number,
-  level2?: number,
+  totalScore: PairWithTotalScore,
 ) => {
   const store = getDefaultStore()
   store.set(RoundStore.rounds, (rounds) => {
@@ -55,27 +115,21 @@ export const updateGameLevel = (
       alert(`轮次 ${roundId} 不存在！`)
       return rounds
     }
-    const game = round.games.find((g) => g.tableId === tableId)
-    if (!game) {
-      alert(`桌号 ${game} 不存在`)
-      return rounds
-    }
-    if (level1) game.level1 = level1
-    if (level2) game.level2 = level2
-    return roundsCopy
-  })
-}
 
-export const updateTotalScore = (roundId: number) => {
-  const store = getDefaultStore()
-  store.set(RoundStore.rounds, (rounds) => {
-    const roundsCopy = rounds.slice()
-    const round = roundsCopy.find((r) => r.roundId === roundId)
-    if (!round) {
-      alert(`轮次 ${roundId} 不存在！`)
+    if (!round.totalScores) {
+      alert(`轮次 ${roundId} 尚未计算总分！`)
       return rounds
     }
-    round.totalScores = computeTotalScore(roundId, rounds)
-    return roundsCopy
+
+    const index = round.totalScores.findIndex(
+      (ts) => ts.pairId === totalScore.pairId,
+    )
+    if (index === -1) {
+      alert(`找不到对 ${totalScore.pairId}！`)
+      return rounds
+    } else {
+      round.totalScores[index] = totalScore
+      return roundsCopy
+    }
   })
 }
