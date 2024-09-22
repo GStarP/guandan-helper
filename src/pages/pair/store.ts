@@ -1,9 +1,9 @@
-import { atom } from 'jotai'
+import { atomWithStorage } from 'jotai/utils'
 
 import { Pair } from '@/guandan/models'
 
 export const PairStore = {
-  pairs: atom<Pair[]>([]),
+  pairs: atomWithStorage<Pair[]>('paris', []),
 }
 
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment

@@ -1,4 +1,5 @@
 import { atom, getDefaultStore } from 'jotai'
+import { atomWithStorage } from 'jotai/utils'
 
 import { Round } from '@/guandan/models'
 
@@ -13,7 +14,7 @@ export const RoundStore = {
     const store = getDefaultStore()
     store.set(RoundStore.curRoute, route)
   },
-  rounds: atom<Round[]>([]),
+  rounds: atomWithStorage<Round[]>('rounds', []),
   curRound: atom(1),
 }
 
