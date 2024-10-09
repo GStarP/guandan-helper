@@ -1,13 +1,16 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Button, MenuItem, Select, Tab, Tabs, Typography } from '@mui/material'
 import { ColDef } from 'ag-grid-community'
 import { AgGridReact } from 'ag-grid-react'
-import { useAtomValue } from 'jotai'
+import { getDefaultStore, useAtomValue } from 'jotai'
 import { useMemo } from 'react'
 
 import { Game, PairWithTotalScore, Round } from '@/guandan/models'
 import { compareTotalScore } from '@/guandan/utils'
+import { pairWithUser } from '@/pages/pair/biz'
 
 import {
+  levelWithNickname,
   recomputeTotalScore,
   updateCurRound,
   updateGame,
@@ -96,6 +99,7 @@ const GameColumns: ColDef<Game>[] = [
     headerName: '桌号',
     flex: 1,
     filter: true,
+    sortable: false,
   },
   {
     field: 'pair1',
@@ -103,7 +107,9 @@ const GameColumns: ColDef<Game>[] = [
     flex: 2,
     filter: true,
     editable: true,
+    sortable: false,
     cellDataType: 'number',
+    cellRenderer: (params: any) => pairWithUser(params.value),
   },
   {
     field: 'pair2',
@@ -111,21 +117,27 @@ const GameColumns: ColDef<Game>[] = [
     flex: 2,
     filter: true,
     editable: true,
+    sortable: false,
     cellDataType: 'number',
+    cellRenderer: (params: any) => pairWithUser(params.value),
   },
   {
     field: 'level1',
     headerName: '对一：终局级数',
     flex: 2,
     editable: true,
+    sortable: false,
     cellDataType: 'number',
+    cellRenderer: (params: any) => levelWithNickname(params.value),
   },
   {
     field: 'level2',
     headerName: '对二：终局级数',
     flex: 2,
     editable: true,
+    sortable: false,
     cellDataType: 'number',
+    cellRenderer: (params: any) => levelWithNickname(params.value),
   },
 ]
 function GameBox(props: { round: Round }) {
@@ -152,33 +164,73 @@ const TotalScoreColumns: ColDef<PairWithTotalScore>[] = [
     field: 'pairId',
     headerName: '对号',
     filter: true,
+    sortable: false,
+    cellRenderer: (params: any) => pairWithUser(params.value),
   },
   {
     field: 'score.selfScore.score',
-    headerName: '总积分',
+    headerName: '总积分（本轮积分）',
     cellDataType: 'number',
     editable: true,
+    sortable: false,
     flex: 1,
+    // TODO: duplicate
+    cellRenderer: (params: any) => {
+      const store = getDefaultStore()
+      const round = store
+        .get(RoundStore.rounds)
+        .find((r) => r.roundId === store.get(RoundStore.curRound) - 1)
+      const preV =
+        round?.totalScores?.find((s) => s.pairId === params.data.pairId)?.score
+          .selfScore.score ?? 0
+      const inc = params.value - preV
+      return `${params.value} (+${inc})`
+    },
   },
   {
     field: 'score.selfScore.levelScore',
-    headerName: '总级差分',
+    headerName: '总级差分（本轮级差分）',
     cellDataType: 'number',
     editable: true,
+    sortable: false,
     flex: 1,
+    cellRenderer: (params: any) => {
+      const store = getDefaultStore()
+      const round = store
+        .get(RoundStore.rounds)
+        .find((r) => r.roundId === store.get(RoundStore.curRound) - 1)
+      const preV =
+        round?.totalScores?.find((s) => s.pairId === params.data.pairId)?.score
+          .selfScore.levelScore ?? 0
+      const inc = params.value - preV
+      return `${params.value} (+${inc})`
+    },
   },
   {
     field: 'score.selfScore.level',
-    headerName: '总级数',
+    headerName: '总级数（本轮级数）',
     cellDataType: 'number',
     editable: true,
+    sortable: false,
     flex: 1,
+    cellRenderer: (params: any) => {
+      const store = getDefaultStore()
+      const round = store
+        .get(RoundStore.rounds)
+        .find((r) => r.roundId === store.get(RoundStore.curRound) - 1)
+      const preV =
+        round?.totalScores?.find((s) => s.pairId === params.data.pairId)?.score
+          .selfScore.level ?? 0
+      const inc = params.value - preV
+      return `${params.value} (+${inc})`
+    },
   },
   {
     field: 'score.maxOpponentScore.score',
     headerName: '最高对手积分',
     cellDataType: 'number',
     editable: true,
+    sortable: false,
     flex: 1,
   },
   {
@@ -186,6 +238,7 @@ const TotalScoreColumns: ColDef<PairWithTotalScore>[] = [
     headerName: '最高对手级差分',
     cellDataType: 'number',
     editable: true,
+    sortable: false,
     flex: 1,
   },
   {
@@ -193,6 +246,7 @@ const TotalScoreColumns: ColDef<PairWithTotalScore>[] = [
     headerName: '最高对手级数',
     cellDataType: 'number',
     editable: true,
+    sortable: false,
     flex: 1,
   },
 ]

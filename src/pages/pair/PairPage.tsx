@@ -16,18 +16,21 @@ const PairColumns: ColDef<Pair>[] = [
     headerName: '对号',
     flex: 1,
     filter: true,
+    sortable: false,
   },
   {
     field: 'user1',
     headerName: '成员一',
     flex: 2,
     editable: true,
+    sortable: false,
   },
   {
     field: 'user2',
     headerName: '成员二',
     flex: 2,
     editable: true,
+    sortable: false,
   },
 ]
 

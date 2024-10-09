@@ -45,3 +45,10 @@ export const updatePair = (pair: Pair) => {
     }
   })
 }
+
+export const pairWithUser = (pairId: number) => {
+  const pair = getDefaultStore()
+    .get(PairStore.pairs)
+    .find((p) => p.pairId === pairId)
+  return `${pairId}（${pair?.user1}，${pair?.user2}）`
+}

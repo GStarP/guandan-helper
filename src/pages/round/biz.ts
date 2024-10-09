@@ -133,3 +133,19 @@ export const updateTotalScore = (
     }
   })
 }
+
+export const levelWithNickname = (level: number) => {
+  if (level <= 10) {
+    return level.toString()
+  } else if (level === 11) {
+    return level + '（J）'
+  } else if (level === 12) {
+    return level + '（Q）'
+  } else if (level === 13) {
+    return level + '（K）'
+  } else if (level === 14) {
+    return level + '（A）'
+  } else if (level === 15) {
+    return level + '（过A）'
+  }
+}
