@@ -1,3 +1,7 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 html,
 body {
   margin: 0;
@@ -22,39 +26,4 @@ body {
 
 .up-full {
   transform: translateY(-100%);
-}
-
-/* tailwind */
-.flex {
-  display: flex;
-}
-.flex-col {
-  flex-direction: column;
-}
-.px-4 {
-  padding: 0 1rem;
-}
-.mb-2 {
-  margin-bottom: 0.5rem;
-}
-.mb-4 {
-  margin-bottom: 1rem;
-}
-.gap-2 {
-  gap: 0.5rem;
-}
-.gap-4 {
-  gap: 1rem;
-}
-.text-base {
-  font-size: 1rem;
-}
-.ml-auto {
-  margin-left: auto;
-}
-.justify-center {
-  justify-content: center;
-}
-.items-center {
-  align-items: center;
 }

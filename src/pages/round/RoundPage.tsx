@@ -28,7 +28,7 @@ export default function RoundPage() {
 
   return (
     <div className="full flex-col px-4">
-      <div className="flex mb-4 gap-4">
+      <div className="flex mb-2 gap-4">
         {rounds.length === 0 ? (
           <Button variant="outlined" onClick={() => updateNextRound(0)}>
             安排首轮对战
