@@ -38,6 +38,8 @@ export const updatePair = (pair: Pair) => {
     const pairsCopy = pairs.slice()
     const index = pairsCopy.findIndex((p) => p.pairId === pair.pairId)
     if (index !== -1) {
+      pair.user1 = pair.user1.trim()
+      pair.user2 = pair.user2.trim()
       pairsCopy[index] = pair
       return pairsCopy
     } else {
