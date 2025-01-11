@@ -153,6 +153,7 @@ function GameBox(props: { round: Round }) {
           onCellValueChanged={(e) => {
             updateGame(props.round.roundId, e.data)
           }}
+          suppressScrollOnNewData
         />
       </div>
     </div>
@@ -284,6 +285,7 @@ function TotalScoreBox(props: { round: Round }) {
               onCellValueChanged={(e) =>
                 updateTotalScore(props.round.roundId, e.data)
               }
+              suppressScrollOnNewData
             />
           </div>
         </div>

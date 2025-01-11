@@ -69,6 +69,7 @@ export default function PairPage() {
             columnDefs={PairColumns}
             rowData={pairs}
             onCellValueChanged={(e) => updatePair(e.data)}
+            suppressScrollOnNewData
           />
         </div>
       </div>
