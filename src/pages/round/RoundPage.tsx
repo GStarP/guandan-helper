@@ -1,12 +1,12 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Button, MenuItem, Select, Tab, Tabs, Typography } from '@mui/material'
 import { ColDef } from 'ag-grid-community'
-import { AgGridReact } from 'ag-grid-react'
 import { getDefaultStore, useAtomValue } from 'jotai'
 import { useMemo } from 'react'
 
 import { Game, PairWithTotalScore, Round } from '@/guandan/models'
 import { compareTotalScore } from '@/guandan/utils'
+import { ThemedAgGridReact } from '@/infra/ag-grid'
 import { pairWithUser } from '@/pages/pair/biz'
 
 import {
@@ -143,24 +143,25 @@ const GameColumns: ColDef<Game>[] = [
 function GameBox(props: { round: Round }) {
   return (
     <div className="full mb-4">
-      <div
-        className="ag-theme-quartz"
+      <ThemedAgGridReact
         style={{ width: '100%', height: '100%' }}
-      >
-        <AgGridReact
-          columnDefs={GameColumns}
-          rowData={props.round.games}
-          onCellValueChanged={(e) => {
-            updateGame(props.round.roundId, e.data)
-          }}
-          suppressScrollOnNewData
-        />
-      </div>
+        columnDefs={GameColumns}
+        rowData={props.round.games}
+        onCellValueChanged={(e) => {
+          updateGame(props.round.roundId, e.data)
+        }}
+        suppressScrollOnNewData
+      />
     </div>
   )
 }
 
 const TotalScoreColumns: ColDef<PairWithTotalScore>[] = [
+  {
+    headerName: '排名',
+    width: 64,
+    valueGetter: (r) => (r.node?.rowIndex ?? 0) + 1,
+  },
   {
     field: 'pairId',
     headerName: '对号',
@@ -275,19 +276,15 @@ function TotalScoreBox(props: { round: Round }) {
         </div>
       ) : (
         <div className="full mb-4">
-          <div
-            className="ag-theme-quartz"
+          <ThemedAgGridReact
             style={{ width: '100%', height: '100%' }}
-          >
-            <AgGridReact
-              columnDefs={TotalScoreColumns}
-              rowData={totalScoresSorted}
-              onCellValueChanged={(e) =>
-                updateTotalScore(props.round.roundId, e.data)
-              }
-              suppressScrollOnNewData
-            />
-          </div>
+            columnDefs={TotalScoreColumns}
+            rowData={totalScoresSorted}
+            onCellValueChanged={(e) =>
+              updateTotalScore(props.round.roundId, e.data)
+            }
+            suppressScrollOnNewData
+          />
         </div>
       )}
     </div>

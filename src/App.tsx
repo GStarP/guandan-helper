@@ -2,6 +2,8 @@ import { AppBar, Button, Toolbar } from '@mui/material'
 import { getDefaultStore, useAtomValue } from 'jotai'
 import { useState } from 'react'
 
+import { useDefaultLightTheme } from './infra/theme'
+import ThemeIconButton from './infra/theme/ThemeIconButton'
 import { Route, RouteStore } from './modules/route/store'
 import PairPage from './pages/pair/PairPage'
 import { PairStore } from './pages/pair/store'
@@ -9,6 +11,8 @@ import RoundPage from './pages/round/RoundPage'
 import { RoundPageRoute, RoundStore } from './pages/round/store'
 
 function App() {
+  useDefaultLightTheme()
+
   const curRoute = useAtomValue(RouteStore.curRoute)
   const [headerShow, setHeaderShow] = useState(true)
 
@@ -42,7 +46,8 @@ function App() {
             </div>
 
             <div className="ml-auto flex gap-2">
-              <Button variant="outlined" color='error' onClick={reset}>
+              <ThemeIconButton />
+              <Button variant="outlined" color="error" onClick={reset}>
                 重置
               </Button>
               <Button variant="outlined" onClick={() => setHeaderShow(false)}>
@@ -58,6 +63,7 @@ function App() {
           </Button>
         </div>
       )}
+
       <main className="full mt-4">
         {curRoute === Route.PAIR ? <PairPage /> : <RoundPage />}
       </main>

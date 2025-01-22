@@ -1,10 +1,10 @@
 import { Button } from '@mui/material'
 import { ColDef } from 'ag-grid-community'
-import { AgGridReact } from 'ag-grid-react'
 import { useAtomValue } from 'jotai'
 import { createRef } from 'react'
 
 import { Pair } from '@/guandan/models'
+import { ThemedAgGridReact } from '@/infra/ag-grid'
 
 import './PairPage.css'
 import { addManyNewPair, addNewPair, updatePair } from './biz'
@@ -61,17 +61,13 @@ export default function PairPage() {
       </div>
 
       <div className="full mb-4">
-        <div
-          className="ag-theme-quartz"
+        <ThemedAgGridReact
           style={{ width: '100%', height: '100%' }}
-        >
-          <AgGridReact
-            columnDefs={PairColumns}
-            rowData={pairs}
-            onCellValueChanged={(e) => updatePair(e.data)}
-            suppressScrollOnNewData
-          />
-        </div>
+          columnDefs={PairColumns}
+          rowData={pairs}
+          onCellValueChanged={(e) => updatePair(e.data)}
+          suppressScrollOnNewData
+        />
       </div>
     </div>
   )

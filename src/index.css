@@ -2,6 +2,9 @@
 @tailwind components;
 @tailwind utilities;
 
+/**
+ * Override
+ */
 html,
 body {
   margin: 0;
@@ -19,6 +22,9 @@ body {
   flex-direction: column;
 }
 
+/**
+ * DIY
+ */
 .full {
   display: flex;
   flex: 1;

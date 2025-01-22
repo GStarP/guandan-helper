@@ -1,12 +1,16 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
+
+import '@/infra/ag-grid'
+
 import App from './App.tsx'
 import './index.css'
-import "ag-grid-community/styles/ag-grid.css";
-import "ag-grid-community/styles/ag-theme-quartz.css"
+import MyThemeProvider from './infra/theme/MyThemeProvider.tsx'
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
-    <App />
+    <MyThemeProvider>
+      <App />
+    </MyThemeProvider>
   </React.StrictMode>,
 )
